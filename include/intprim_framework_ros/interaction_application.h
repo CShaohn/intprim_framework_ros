@@ -1,6 +1,8 @@
 /* @author Joseph Campbell <jacampb1@asu.edu>, Interactive Robotics Lab, Arizona State University */
 #pragma once
 
+
+
 /*!
     @addtogroup interaction_core
     @{
@@ -36,7 +38,7 @@ public:
 
         @param handle The ROS node handle.
     */
-    InteractionApplication(ros::NodeHandle* handle);
+    InteractionApplication(ros::NodeHandle* handle);    
 
     /*!
         Entry point for the CLI application.
@@ -55,7 +57,9 @@ private:
         lbr4,
         ur5,
         ur5l,
-        ur5c
+        ur5c,
+        baxter,
+        xsens
     };
 
     enum end_demo_signal

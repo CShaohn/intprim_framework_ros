@@ -64,12 +64,12 @@ bip:
     scale_observations: false # Perform basis standardization
     cyclical: false # If true, the phase will roll back to 0 once it is >= 1.
     debug: false
-    import_data: "/home/shaohn/workspace/ir_lab/src/intprim_framework_ros/docs/tutorials/tutorial_examples/handwritten/trained_bip.bip"
-    observation_noise: "/home/shaohn/workspace/ir_lab/src/intprim_framework_ros/docs/tutorials/tutorial_examples/handwritten/observation_noise.noise"
-    mip_test_directory: "/home/shaohn/workspace/ir_lab/src/intprim_framework_ros/docs/tutorials/tutorial_examples/handwritten/csvs"
-    debug_directory: "/home/shaohn/workspace/ir_lab/src/intprim_framework_ros/docs/tutorials/tutorial_examples/handwritten/debug"
+    import_data: "/home/shaohn/workspace/ir_lab/src/m_exem/handwritten/trained_bip.bip"
+    observation_noise: "/home/shaohn/workspace/ir_lab/src/m_exem/handwritten/observation_noise.noise"
+    mip_test_directory: "/home/shaohn/workspace/ir_lab/src/m_exem/handwritten/csvs"
+    debug_directory: "/home/shaohn/workspace/ir_lab/src/m_exem/handwritten/debug"
     config_name: "Config1"
-    primary: true
+    primary: false
 -   id: 1
     name: "CoppeliaSim"
     modalities:
@@ -155,9 +155,103 @@ bip:
     scale_observations: false # Perform basis standardization
     cyclical: false # If true, the phase will roll back to 0 once it is >= 1.
     debug: false
-    import_data: "/home/shaohn/workspace/ir_lab/src/intprim_framework_ros/docs/tutorials/tutorial_examples/coppelia/trained_bip.bip"
-    observation_noise: "/home/shaohn/workspace/ir_lab/src/intprim_framework_ros/docs/tutorials/tutorial_examples/coppelia/observation_noise.noise"
-    mip_test_directory: "/home/shaohn/workspace/ir_lab/src/intprim_framework_ros/docs/tutorials/tutorial_examples/coppelia/csvs"
-    debug_directory: "/home/shaohn/workspace/ir_lab/src/intprim_framework_ros/docs/tutorials/tutorial_examples/coppelia/debug"
+    import_data: "/home/shaohn/workspace/ir_lab/src/m_exem/coppelia/trained_bip.bip"
+    observation_noise: "/home/shaohn/workspace/ir_lab/src/m_exem/coppelia/observation_noise.noise"
+    mip_test_directory: "/home/shaohn/workspace/ir_lab/src/m_exem/coppelia/csvs"
+    debug_directory: "/home/shaohn/workspace/ir_lab/src/m_exem/coppelia/debug"
     config_name: "Config2"
     primary: false
+-   id: 2
+    name: "movebox"
+    modalities:
+    -   name: "xsens"
+        indices: [0, 49]
+        dof_names: ["head x", "head y","head z","head i","head j","head k","head w",
+                    "right_upper_arm x", "right_upper_arm y","right_upper_arm z","right_upper_arm i","right_upper_arm j","right_upper_arm k","right_upper_arm w",
+                    "right_forearm x", "right_forearm y","right_forearm z","right_forearm i","right_forearm j","right_forearm k","right_forearm w",
+                    "right_hand x", "right_hand y","right_hand z","right_hand i","right_hand j","right_hand k","right_hand w",
+                    "left_upper_arm x", "left_upper_arm y","left_upper_arm z","left_upper_arm i","left_upper_arm j","left_upper_arm k","left_upper_arm w",
+                    "left_forearm x", "left_forearm y","left_forearm z","left_forearm i","left_forearm j","left_forearm k","left_forearm w",
+                    "left_hand x", "left_hand y","left_hand z","left_hand i","left_hand j","left_hand k","left_hand w", 
+            ]
+        basis_model:
+            type: "Gaussian"
+            degree: 7
+            scale: 0.07
+            start_phase: 0.0
+            end_phase: 1.0
+        scaling_groups : [
+            0, 0, 0,  0, 0, 0, 0,
+            0, 0, 0,  0, 0, 0, 0,
+            0, 0, 0,  0, 0, 0, 0,
+            0, 0, 0,  0, 0, 0, 0,
+            0, 0, 0,  0, 0, 0, 0,
+            0, 0, 0,  0, 0, 0, 0,
+            0, 0, 0,  0, 0, 0, 0,
+            
+        ]
+        noise_bias: 0.0 # Added to the measurement noise for each DoF of this modality.
+        generate: false
+        active: true
+        active_from: 0.0 # Each DoF will only be active when the estimated phase is between from/until. When inactive, it will not be perturbed by noise and the measurement noise will be increased.
+        active_until: 1.01
+    #--------------------------------------------------------------------------
+    -   name: "baxter"
+        indices: [49, 56]
+        dof_names: [
+            "left s0",
+            "left s1",
+            "left e0",
+            "left e1",
+            "left w0",
+            "left w1",
+            "left w2"
+        ]
+        basis_model:
+            type: "Gaussian"
+            degree: 7
+            scale: 0.07
+            start_phase: 0.0
+            end_phase: 1.0
+        scaling_groups : [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ]
+        noise_bias: 0.0 # Added to the measurement noise for each DoF of this modality.
+        generate: true
+        active: true
+        active_from: 0.0 # Each DoF will only be active when the estimated phase is between from/until. When inactive, it will not be perturbed by noise and the measurement noise will be increased.
+        active_until: 1.01
+    #--------------------------------------------------------------------------
+    filter:
+        name: "enkf"
+        ensemble_size: 100 # Max number of demonstrations!
+        initial_phase: 0.0
+        initial_phase_variance: 0.01
+        initial_phase_velocity: 0.003028400493295413
+        initial_phase_velocity_variance: 2.9307595907134784e-07
+        initial_phase_acceleration: 0.0001
+        initial_phase_acceleration_variance: 4.012610510198e-10
+        process_variance: 1e-7
+        time_delta: 1.0
+        measurement_noise_bias: 10000.0
+        system_order: 1
+    prior:
+        init_with_demonstrations: true # If this is true, the ensemble_size is upper bounded by the number of demonstrations available.
+        reg_covar: 1e-6
+        num_components: 1
+    num_samples: 40
+    phase_lookahead: 0.00
+    scale_observations: false # Perform basis standardization
+    cyclical: false # If true, the phase will roll back to 0 once it is >= 1.
+    debug: false
+    import_data: "/home/shaohn/workspace/ir_lab/src/m_exem/movebox/trained_bip.bip"
+    observation_noise: "/home/shaohn/workspace/ir_lab/src/m_exem/movebox/observation_noise.noise"
+    mip_test_directory: "/home/shaohn/workspace/ir_lab/src/m_exem/movevbox/csvs"
+    debug_directory: "/home/shaohn/workspace/ir_lab/src/m_exem/movebox/debug"
+    config_name: "Config3"
+    primary: true

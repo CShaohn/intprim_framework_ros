@@ -20,3 +20,13 @@ experiments:
     -   "ur5l" # lead
     -   "ur5c" # control
     controller: "ur5c" # "none"
+-   id: 2
+    name: "movebox"
+    timeout: 60 # In seconds
+    sub_actions:
+    -   prefix: "movebox"
+        message: "Baxter movebox will execute..."
+    devices:
+    -   "xsens" # lead
+    -   "baxter" # control
+    controller: "baxter" # "none"

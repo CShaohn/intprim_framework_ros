@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 2.8.3)
 project(intprim_framework_ros)
 
 ## Add support for C++11, supported in ROS Kinetic and newer
-add_definitions(-std=c++14)
+add_definitions(-std=c++11)
+#add_definitions(-std=c++14)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -137,6 +138,16 @@ if(irl_robot_drivers_FOUND)
     )
 endif()
 
+list(APPEND CORE_SRC
+        src/devices/baxter.cpp
+        src/devices/xsens.cpp
+    )
+
+list(APPEND CONTROLLER_SRC
+        src/devices/baxter.cpp
+        src/devices/xsens.cpp
+    )
+
 add_executable(
     interaction_application
     ${CORE_SRC}
@@ -152,6 +163,10 @@ if(irl_robot_drivers_FOUND)
     target_compile_definitions(robot_controller PRIVATE IRL_ROBOTS_AVAILABLE)
 endif()
 
+
+
+target_compile_definitions(interaction_application PRIVATE BIRL_ROBOTS_AVAILABLE)
+target_compile_definitions(robot_controller PRIVATE BIRL_ROBOTS_AVAILABLE)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above

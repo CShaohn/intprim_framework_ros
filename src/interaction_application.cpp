@@ -7,6 +7,10 @@
     #include "devices/lbr4.h"
     #include "devices/ur5.h"
 #endif
+#ifdef BIRL_ROBOTS_AVAILABLE
+    #include "devices/baxter.h"
+    #include "devices/xsens.h"
+#endif
 
 #include <cmath>
 #include <cstdlib>
@@ -110,7 +114,7 @@ void InteractionApplication::read_experiments()
             {
                 new_experiment.controller_frequency = static_cast<int>(control_param_list[static_cast<std::string>(experiment["controller"])]["control_frequency"]);
             }
-
+            
             m_experiments.push_back(new_experiment);
         }
     }
@@ -187,6 +191,14 @@ InteractionApplication::DeviceInterfaceTypes InteractionApplication::string_to_d
     {
         new_device = InteractionApplication::DeviceInterfaceTypes::lbr4;
     }
+        else if(device_name == "baxter")
+    {
+        new_device = InteractionApplication::DeviceInterfaceTypes::baxter;
+    }
+        else if(device_name == "xsens")
+    {
+        new_device = InteractionApplication::DeviceInterfaceTypes::xsens;
+    }
 
     return new_device;
 }
@@ -197,6 +209,12 @@ std::unique_ptr<DeviceInterface> InteractionApplication::create_device(DeviceInt
 
     switch(interface_type)
     {
+        case InteractionApplication::DeviceInterfaceTypes::baxter:
+            device_interface = create_robot(interface_type);
+            break;
+        case InteractionApplication::DeviceInterfaceTypes::xsens:
+            device_interface = create_robot(interface_type);
+            break;
         case InteractionApplication::DeviceInterfaceTypes::ur5:
             device_interface = create_robot(interface_type);
             break;
@@ -220,6 +238,20 @@ std::unique_ptr<RobotInterface> InteractionApplication::create_robot(DeviceInter
 
     switch(interface_type)
     {
+        case InteractionApplication::DeviceInterfaceTypes::baxter:
+            #ifdef BIRL_ROBOTS_AVAILABLE
+                robot_interface = std::unique_ptr<BaxterInterface>(new BaxterInterface(*m_handle));
+            #else
+                throw std::runtime_error("Experiment uses BaxterInterface but BIRL unavailable.");
+            #endif
+            break;
+        case InteractionApplication::DeviceInterfaceTypes::xsens:
+            #ifdef BIRL_ROBOTS_AVAILABLE
+                robot_interface = std::unique_ptr<XsensInterface>(new XsensInterface(*m_handle));
+            #else
+                throw std::runtime_error("Experiment uses XsensInterface but BIRL unavailable.");
+            #endif
+            break;
         case InteractionApplication::DeviceInterfaceTypes::ur5:
             #ifdef IRL_ROBOTS_AVAILABLE
                 robot_interface = std::unique_ptr<UR5Interface>(new UR5Interface(*m_handle, "regular"));
@@ -429,7 +461,7 @@ void InteractionApplication::test_no_export(const Experiment& experiment)
 
     for(const auto& sub_action : experiment.sub_actions)
     {
-
+        
         std::cout << sub_action.message << "\n";
         std::cout << "Please get ready and press [space] to begin test.\n\n";
 
@@ -760,7 +792,7 @@ void InteractionApplication::train_export_csv_from_rosbag(const Experiment& expe
     for(const auto& sub_action : experiment.sub_actions)
     {
         std::string prefix(sub_action.prefix);
-
+        
         std::size_t num_files = 0;
         for(const auto& name : std::experimental::filesystem::directory_iterator(dir_path))
         {
@@ -786,7 +818,7 @@ void InteractionApplication::train_export_csv_from_rosbag(const Experiment& expe
                 command << name.path().string();
 
                 mip.begin_demonstration(m_observation_frequency, m_max_observation_length, true, false, true);
-
+     
                 std::system(command.str().c_str());
 
                 mip.end_demonstration();
