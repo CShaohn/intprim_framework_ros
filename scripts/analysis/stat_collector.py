@@ -36,7 +36,6 @@ class StatCollector():
             for idx in range(len(self.ensembles)):
                 if(idx == 0):
                     full_ensemble_set = self.ensembles[idx][bip_instance.filter.system_order:, :].T
-
                 full_ensemble_set = np.vstack([full_ensemble_set, self.ensembles[idx][bip_instance.filter.system_order:, :].T])
 
             pca = sklearn.decomposition.PCA(n_components = 2)

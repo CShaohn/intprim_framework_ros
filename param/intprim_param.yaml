@@ -176,8 +176,8 @@ bip:
             ]
         basis_model:
             type: "Gaussian"
-            degree: 7
-            scale: 0.07
+            degree: 13
+            scale: 0.04
             start_phase: 0.0
             end_phase: 1.0
         scaling_groups : [
@@ -209,8 +209,8 @@ bip:
         ]
         basis_model:
             type: "Gaussian"
-            degree: 7
-            scale: 0.07
+            degree: 13
+            scale: 0.01
             start_phase: 0.0
             end_phase: 1.0
         scaling_groups : [
@@ -229,10 +229,10 @@ bip:
     #--------------------------------------------------------------------------
     filter:
         name: "enkf"
-        ensemble_size: 100 # Max number of demonstrations!
+        ensemble_size: 50 # Max number of demonstrations!
         initial_phase: 0.0
-        initial_phase_variance: 0.01
-        initial_phase_velocity: 0.003028400493295413
+        initial_phase_variance: 2.8906259213102954e-09
+        initial_phase_velocity: 0.000996576057144579
         initial_phase_velocity_variance: 2.9307595907134784e-07
         initial_phase_acceleration: 0.0001
         initial_phase_acceleration_variance: 4.012610510198e-10
@@ -244,11 +244,11 @@ bip:
         init_with_demonstrations: true # If this is true, the ensemble_size is upper bounded by the number of demonstrations available.
         reg_covar: 1e-6
         num_components: 1
-    num_samples: 40
+    num_samples: 60
     phase_lookahead: 0.00
     scale_observations: false # Perform basis standardization
     cyclical: false # If true, the phase will roll back to 0 once it is >= 1.
-    debug: false
+    debug: true
     import_data: "/home/shaohn/workspace/ir_lab/src/m_exem/movebox/trained_bip.bip"
     observation_noise: "/home/shaohn/workspace/ir_lab/src/m_exem/movebox/observation_noise.noise"
     mip_test_directory: "/home/shaohn/workspace/ir_lab/src/m_exem/movevbox/csvs"

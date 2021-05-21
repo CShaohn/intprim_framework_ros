@@ -1,13 +1,13 @@
 interaction:
     observation_frequency: 100.0
-    max_observation_length: 800
+    max_observation_length: 1200
     min_observation_length: 1
-    response_frequency: 30.0
+    response_frequency: 10.0
     single_point_trajectory: # Whether to only generate a trajectory consisting of a single point at the given phase.
         use: false
         phase: "current" # This can either be a floating point value indicating a specific phase to generate at, or "current" to use the currently estimated phase.
     start_generation_phase: 0.07 # Start generating trajectories if estimated phase exceeds this value.
-    stop_generation_phase: 1.1 # Stop generating trajectories if estimated phase exceeds this value.
+    stop_generation_phase: 1 # Stop generating trajectories if estimated phase exceeds this value.
     playback_factor: 1.0
     default_record_dir: "/home/shaohn/workspace/ir_lab/src/m_exem/record"
     default_playback_dir: "/home/shaohn/workspace/ir_lab/src/m_exem/movebox/csvs"
@@ -20,4 +20,4 @@ control:
     baxter:
         control_frequency: 10
         joint_distance_threshold: 0.13
-    controller: "baxter" # Only used if robot controller is launched as an independent node.
+    #controller: "baxter" # Only used if robot controller is launched as an independent node.

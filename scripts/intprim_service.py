@@ -100,6 +100,7 @@ class IntPrimService():
             intprim_framework_ros.srv.GetMeanTrajectory,
             self.get_mean_trajectory_callback)
 
+
         self.get_statistics_service = rospy.Service(
             "/ip/getStatistics",
             intprim_framework_ros.srv.GetStatistics,
@@ -675,7 +676,7 @@ class IntPrimService():
         self.statistics_publisher.publish(message)
 
         # Export debugging XML file here.
-        if(self.bip_parameters[0]["debug"]):
+        if(self.bip_parameters[request.interaction_id]["debug"]):
             self.stat_collector.export(self.bip_instances[request.interaction_id], self.bip_parameters[request.interaction_id]["debug_directory"], request.bag_file, self.bip_parameters[request.interaction_id]["num_samples"])
 
         # Return values as part of service call as well
@@ -708,11 +709,11 @@ class IntPrimService():
         self.initialize_state()
 
         # Initialize stat collection for debugging
-        if(self.bip_parameters[0]["debug"]):
-            self.stat_collector = analysis.stat_collector.StatCollector(self.bip_instances[0], self.bip_parameters[0]["generate_indices"], np.setdiff1d(self.bip_parameters[0]["all_active_dofs"], self.bip_parameters[0]["generate_indices"]))
+        if(self.bip_parameters[self.primary_instance]["debug"]):
+            self.stat_collector = analysis.stat_collector.StatCollector(self.bip_instances[self.primary_instance], self.bip_parameters[self.primary_instance]["generate_indices"], np.setdiff1d(self.bip_parameters[self.primary_instance]["all_active_dofs"], self.bip_parameters[self.primary_instance]["generate_indices"]))
 
-            generated_trajectory = self.bip_instances[0].get_mean_trajectory(num_samples = self.bip_parameters[0]["num_samples"])
-            self.stat_collector.collect(self.bip_instances[0], np.array([[] for _ in range(generated_trajectory.shape[0])]), generated_trajectory.T, None)
+            generated_trajectory = self.bip_instances[self.primary_instance].get_mean_trajectory(num_samples = self.bip_parameters[self.primary_instance]["num_samples"])
+            self.stat_collector.collect(self.bip_instances[self.primary_instance], np.array([[] for _ in range(generated_trajectory.shape[0])]), generated_trajectory.T, None)
 
         return intprim_framework_ros.srv.InitializeStateResponse(True)
 

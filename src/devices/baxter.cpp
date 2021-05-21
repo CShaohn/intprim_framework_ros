@@ -93,8 +93,9 @@ BaxterInterface::BaxterInterface(ros::NodeHandle handle) :
     // m_publishMessage.lookahead = 0;
     // m_publishMessage.time = m_messageTime;
     // m_publishMessage.velocity = 0;
+    //m_publishMessage.mode = 1;
 
-    m_statePublisher = handle.advertise<baxter_core_msgs::JointCommand>("/robot/limb/left/joint_command", 1);
+    m_statePublisher = handle.advertise<sensor_msgs::JointState>("/baxter/limb/left/joint_command", 1);
     m_stateSubscriber = handle.subscribe("/baxter/jointstates_left", 1, &BaxterInterface::state_callback, this);
 }
 
@@ -107,8 +108,7 @@ void BaxterInterface::publish_state(const std::vector<float>& trajectory, std::s
 {
     for(std::size_t joint_idx = 0; joint_idx < BaxterState::NUM_JOINTS; ++joint_idx)
     {
-        m_publishMessage.mode = 1;
-        m_publishMessage.command[joint_idx] = trajectory[trajectory_idx + joint_idx];
+        m_publishMessage.position[joint_idx] = trajectory[trajectory_idx + joint_idx];
     }
 
     m_statePublisher.publish(m_publishMessage);

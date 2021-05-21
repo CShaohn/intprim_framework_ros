@@ -456,9 +456,9 @@ void InteractionApplication::start_test()
 void InteractionApplication::test_no_export(const Experiment& experiment)
 {
     set_sim_time(false);
-
+    
     RobotController robot_controller(*m_handle, experiment.controller_frequency, create_robot(experiment.controller));
-
+    
     for(const auto& sub_action : experiment.sub_actions)
     {
         
