@@ -47,7 +47,7 @@ class BaxterInterface : public RobotInterface               //BaxterInterface ç»
         ros::Publisher                              m_statePublisher;
 
         BaxterState                                 m_currentState;
-        sensor_msgs::JointState                     m_publishMessage;
+        baxter_core_msgs::JointCommand              m_publishMessage;
 
         unsigned int                                m_control_frequency;
         float                                       m_messageTime;
