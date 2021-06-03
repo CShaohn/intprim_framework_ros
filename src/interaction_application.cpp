@@ -598,7 +598,7 @@ void InteractionApplication::test_from_rosbag(const Experiment& experiment)
                 std::cout << "Created core" << std::endl;
 
                 std::stringstream command;
-                command << "rosbag play --clock --hz=100 --delay=2 --quiet --rate=" << m_playback_factor << " ";
+                command << "rosbag play --clock --hz=100 --delay=2 --quiet --rate=0.5" << m_playback_factor << " ";
                 command << name.path().string();
 
                 std::cout << "Made command" << std::endl;

@@ -10,6 +10,7 @@ class BaxterState : public DeviceState                      //BaxterState 继承
 {
     public:
         static constexpr unsigned int           NUM_JOINTS = 7;    //only single hand
+        static const std::string                JOINT_NAMES[NUM_JOINTS];
         static double                           JOINT_THRESHOLD;
 
         BaxterState();

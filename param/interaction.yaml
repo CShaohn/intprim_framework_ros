@@ -6,8 +6,8 @@ interaction:
     single_point_trajectory: # Whether to only generate a trajectory consisting of a single point at the given phase.
         use: false
         phase: "current" # This can either be a floating point value indicating a specific phase to generate at, or "current" to use the currently estimated phase.
-    start_generation_phase: 0.07 # Start generating trajectories if estimated phase exceeds this value.
-    stop_generation_phase: 1 # Stop generating trajectories if estimated phase exceeds this value.
+    start_generation_phase: 0.001 # Start generating trajectories if estimated phase exceeds this value.
+    stop_generation_phase: 1.2 # Stop generating trajectories if estimated phase exceeds this value.
     playback_factor: 1.0
     default_record_dir: "/home/shaohn/workspace/ir_lab/src/m_exem/record"
     default_playback_dir: "/home/shaohn/workspace/ir_lab/src/m_exem/movebox/csvs"

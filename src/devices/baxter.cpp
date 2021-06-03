@@ -7,10 +7,21 @@
 #include <string>
 #include <thread>
 
-double BaxterState::JOINT_THRESHOLD = 0.0;
+
+const std::string BaxterState::JOINT_NAMES[BaxterState::NUM_JOINTS] = {
+    "left_e0",
+    "left_e1",
+    "left_s0",
+    "left_s1",
+    "left_w0",
+    "left_w1",
+    "left_w2"
+};
+
+double BaxterState::JOINT_THRESHOLD = 0.13;
 double BaxterInterface::CONTROL_TIME_BUFFER = 0.0;
-int    BaxterInterface::CONTROL_FREQUENCY = 0;
-double BaxterInterface::MAX_ACCELERATION = 0.0;
+int    BaxterInterface::CONTROL_FREQUENCY = 10;
+double BaxterInterface::MAX_ACCELERATION = 1.0;
 
 BaxterState::BaxterState() :
     m_message(),
@@ -85,16 +96,12 @@ BaxterInterface::BaxterInterface(ros::NodeHandle handle) :
 
     m_messageTime = (1.0 / CONTROL_FREQUENCY) * CONTROL_TIME_BUFFER;
 
-    // m_publishMessage.acceleration = MAX_ACCELERATION;
-    // m_publishMessage.blend = 0;
-    // m_publishMessage.command = "speed";
-    // m_publishMessage.gain = 0;
-    // m_publishMessage.jointcontrol = true;
-    // m_publishMessage.lookahead = 0;
-    // m_publishMessage.time = m_messageTime;
-    // m_publishMessage.velocity = 0;
+    for(const auto& name : BaxterState::JOINT_NAMES)
+    {
+        m_publishMessage.names.push_back(name);
+        m_publishMessage.command.push_back(0.0);
+    }
     m_publishMessage.mode = 1;
-
     m_statePublisher = handle.advertise<baxter_core_msgs::JointCommand>("/robot/limb/left/joint_command", 1);
     m_stateSubscriber = handle.subscribe("/baxter/jointstates_left", 1, &BaxterInterface::state_callback, this);
 }
@@ -110,7 +117,6 @@ void BaxterInterface::publish_state(const std::vector<float>& trajectory, std::s
     {
         m_publishMessage.command[joint_idx] = trajectory[trajectory_idx + joint_idx];
     }
-
     m_statePublisher.publish(m_publishMessage);
 }
 

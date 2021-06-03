@@ -199,10 +199,10 @@ bip:
     -   name: "baxter"
         indices: [49, 56]
         dof_names: [
-            "left s0",
-            "left s1",
             "left e0",
             "left e1",
+            "left s0",
+            "left s1",
             "left w0",
             "left w1",
             "left w2"
@@ -231,8 +231,8 @@ bip:
         name: "enkf"
         ensemble_size: 50 # Max number of demonstrations!
         initial_phase: 0.0
-        initial_phase_variance: 2.8906259213102954e-09
-        initial_phase_velocity: 0.000996576057144579
+        initial_phase_variance: 3.1557723420816863e-09
+        initial_phase_velocity: 0.0009623633344284744
         initial_phase_velocity_variance: 2.9307595907134784e-07
         initial_phase_acceleration: 0.0001
         initial_phase_acceleration_variance: 4.012610510198e-10
@@ -249,8 +249,8 @@ bip:
     scale_observations: false # Perform basis standardization
     cyclical: false # If true, the phase will roll back to 0 once it is >= 1.
     debug: true
-    import_data: "/home/shaohn/workspace/ir_lab/src/m_exem/movebox/trained_bip.bip"
-    observation_noise: "/home/shaohn/workspace/ir_lab/src/m_exem/movebox/observation_noise.noise"
+    import_data: "/home/shaohn/workspace/ir_lab/src/m_exem/movebox/old/trained_bip.bip"
+    observation_noise: "/home/shaohn/workspace/ir_lab/src/m_exem/movebox/old/observation_noise.noise"
     mip_test_directory: "/home/shaohn/workspace/ir_lab/src/m_exem/movevbox/csvs"
     debug_directory: "/home/shaohn/workspace/ir_lab/src/m_exem/movebox/debug"
     config_name: "Config3"

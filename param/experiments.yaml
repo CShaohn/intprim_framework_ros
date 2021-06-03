@@ -22,7 +22,7 @@ experiments:
     controller: "ur5c" # "none"
 -   id: 2
     name: "movebox"
-    timeout: 60 # In seconds
+    timeout: 25 # In seconds
     sub_actions:
     -   prefix: "movebox"
         message: "Baxter movebox will execute..."
